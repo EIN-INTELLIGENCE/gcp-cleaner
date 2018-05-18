@@ -10,7 +10,10 @@ Automate managing GCP resources
 ## Getting Started
 
 * [Generate a service account](https://cloud.google.com/docs/authentication/getting-started)
-* Set the credential file path as an environment variable in `.env` file
+* environment variable in `.env` file
 
-ex. GOOGLE_APPLICATION_CREDENTIALS=<SERVICE_ACCOUNT_1234.json>
-
+```bash
+GOOGLE_APPLICATION_CREDENTIALS=<SERVICE_ACCOUNT_1234.json> // Set the credential file path
+GCLOUD_PROJECT=ein-cloud // Set default project
+GCLOUD_ZONE=us-central1-a // Set default zone
+```
