@@ -23,6 +23,7 @@
   "dependencies": {
     "@google-cloud/compute": "^0.10.0",
     "async": "^2.6.0",
+    "dotenv": "^5.0.1",
     "express": "^4.16.3",
     "request": "^2.86.0"
   }
