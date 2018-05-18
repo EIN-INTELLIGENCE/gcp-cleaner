@@ -5,30 +5,7 @@ const compute = require('./compute');
 const app = express();
 const PORT = 8080;
 
-var simpleGetResHandler = (path, message) => {
-  app.get(path, (req, res) => res.send(message))
-};
-
-simpleGetResHandler('/', 'gcp-cleaner is running...');
-
-app.get('/stop/:name', (req, res) => {
-  compute.deleteVM(req.params.name, 'us-central1-c')
-    .then(() => res.send('VM is successfully deleted.'))
-    .catch(err => {
-      console.error(err);
-      res.code(400).send(JSON.stringify(err));
-    })
-});
-
-app.get('/start', (req, res) => {
-  var timestamp = Math.floor(Date.now() / 1000);
-  compute.createVM('ein-gcp-cleaner' + timestamp, '', { os: 'ubuntu' })
-    .then(() => res.send('VM is successfully created.'))
-    .catch(err => {
-      console.error(err);
-      res.code(400).send(JSON.stringify(err));
-    })
-});
+app.get('/', (req, res) => res.send('gcp-cleaner is running...'));
 
 app.get('/status', (req, res) => {
   compute.listVMs({}, list => {
@@ -36,10 +13,37 @@ app.get('/status', (req, res) => {
   })
 });
 
-app.get('/create/disk/:name/:snapshot/:size/:type', (req, res) => {
-  var { name, snapshot, size, type } = req.params;
-  console.log(name, snapshot, size, type);
-  compute.createDisk(name, '', snapshot, size, type)
+app.get('/start', (req, res) => {
+  var timestamp = Math.floor(Date.now() / 1000);
+  var { name, zone, os, disk, machineType } = req.query;
+  var options = {
+    os: os || 'ubuntu',
+    disk: disk || 'default-disk',
+    machineType: machineType || 'n1-standard-4'
+  };
+  var name = name || 'ein-gcp-cleaner' + timestamp;
+  compute.createVM(name, zone, options)
+    .then(() => res.send('VM is successfully created.'))
+    .catch(err => {
+      console.error(err);
+      res.code(400).send(JSON.stringify(err));
+    })
+});
+
+app.get('/stop', (req, res) => {
+  var { name, zone } = req.query;
+  console.log(name, zone);
+  compute.deleteVM(name, zone)
+    .then(() => res.send('VM is successfully deleted.'))
+    .catch(err => {
+      console.error(err);
+      res.send(JSON.stringify(err));
+    })
+});
+
+app.get('/create/disk', (req, res) => {
+  var { name, snapshot, size, type, zone } = req.query;
+  compute.createDisk(name, zone, snapshot, size, type)
     .then(() => res.send('Disk is successfully created.'))
     .catch(err => {
       console.error(err);
