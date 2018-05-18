@@ -1,0 +1,23 @@
+{
+  "name": "gcp-cleaner",
+  "version": "0.0.1",
+  "description": "Google Cloud Platform Resource Cleaner",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EIN-INTELLIGENCE/gcp-cleaner.git"
+  },
+  "keywords": [
+    "EIN",
+    "GCP"
+  ],
+  "author": "EIN",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/EIN-INTELLIGENCE/gcp-cleaner/issues"
+  },
+  "homepage": "https://github.com/EIN-INTELLIGENCE/gcp-cleaner#readme"
+}
