@@ -11,4 +11,3 @@ exports.listVMs = function (options, callback) {
     callback(vms);
   });
 }
-
