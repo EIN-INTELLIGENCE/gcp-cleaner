@@ -1,6 +1,6 @@
 const Compute = require('@google-cloud/compute');
 const compute = new Compute();
-
+const { logger } = require('../logger');
 
 var nameResolver = {
   zone: (name) => name || process.env.GCLOUD_ZONE,
@@ -11,11 +11,11 @@ var nameResolver = {
 
 exports.listVMs = (options, callback) => {
   compute.getVMs(options, (err, vms) => {
-    console.log(JSON.stringify(options), JSON.stringify(err), JSON.stringify(vms));
+    logger.info(JSON.stringify(options), JSON.stringify(err), JSON.stringify(vms));
     if (err) {
       return callback(err);
     }
-    console.log(vms);
+    logger.info(vms);
     callback(vms);
   });
 };
@@ -38,7 +38,7 @@ exports.createVM = (name, zone, options) => {
       }
     ],
   };
-  console.log('Creating VM ' + name + ' config : ' + JSON.stringify(config));
+  logger.info('Creating VM ' + name + ' config : ' + JSON.stringify(config));
   return zone.createVM(name, config)
     .then(data => {
       const vm = data[0];
@@ -52,7 +52,7 @@ exports.deleteVM = (name, zone) => {
   var vm = zone.vm(name);
   return vm.delete()
     .then(data => {
-      console.log('Deleting ' + name + '...');
+      logger.info('Deleting ' + name + '...');
       const operation = data[0];
       return operation.promise();
     });
@@ -67,7 +67,7 @@ exports.createDisk = (name, zone, snapshot, size, type) => {
   };
   return zone.createDisk(name, config)
     .then(data => {
-      console.log('Creating disk ' + name + '...');
+      logger.info('Creating disk ' + name + '...');
       const vm = data[0];
       const operation = data[1];
       return operation.promise();

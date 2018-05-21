@@ -2,15 +2,15 @@ require('dotenv').config()
 
 const express = require('express');
 const compute = require('./compute');
-const logger = require('./logger');
+const { logger } = require('./logger');
 const app = express();
 const PORT = 8080;
 
 app.get('/', (req, res) => res.send('gcp-cleaner is running...'));
 
 app.get('/status', (req, res) => {
+  logger.info('[GET] /status');
   compute.listVMs({}, list => {
-    logger.info('[GET] /status');
     res.send(JSON.stringify(list))
   })
 });
@@ -27,18 +27,18 @@ app.get('/start', (req, res) => {
   compute.createVM(name, zone, options)
     .then(() => res.send('VM is successfully created.'))
     .catch(err => {
-      console.error(err);
+      logger.error(JSON.stringify(err));
       res.code(400).send(JSON.stringify(err));
     })
 });
 
 app.get('/stop', (req, res) => {
   var { name, zone } = req.query;
-  console.log(name, zone);
+  logger.info(name, zone);
   compute.deleteVM(name, zone)
     .then(() => res.send('VM is successfully deleted.'))
     .catch(err => {
-      console.error(err);
+      logger.error(JSON.stringify(err));
       res.send(JSON.stringify(err));
     })
 });
@@ -48,11 +48,11 @@ app.get('/create/disk', (req, res) => {
   compute.createDisk(name, zone, snapshot, size, type)
     .then(() => res.send('Disk is successfully created.'))
     .catch(err => {
-      console.error(err);
+      logger.error(JSON.stringify(err));
       res.code(400).send(JSON.stringify(err));
     })
 });
 
 app.listen(PORT, function () {
-  console.log('gcp-cleaner is listening on port ' + PORT);
+  logger.info('gcp-cleaner is listening on port ' + PORT);
 });

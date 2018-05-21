@@ -4,7 +4,7 @@ const Console = winston.transports.Console;
 const LoggingWinston = require('@google-cloud/logging-winston').LoggingWinston;
 const loggingWinston = new LoggingWinston();
 
-exports.default = new Logger({
+exports.logger = new Logger({
   level: 'info',
   transports: [
     new Console(),

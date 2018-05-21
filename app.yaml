@@ -1,2 +1,3 @@
+service: gcp-cleaner
 env: flex
 runtime: nodejs
