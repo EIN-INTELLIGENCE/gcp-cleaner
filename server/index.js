@@ -2,6 +2,7 @@ require('dotenv').config()
 
 const express = require('express');
 const compute = require('./compute');
+const logger = require('./logger');
 const app = express();
 const PORT = 8080;
 
@@ -9,6 +10,7 @@ app.get('/', (req, res) => res.send('gcp-cleaner is running...'));
 
 app.get('/status', (req, res) => {
   compute.listVMs({}, list => {
+    logger.info('[GET] /status');
     res.send(JSON.stringify(list))
   })
 });
